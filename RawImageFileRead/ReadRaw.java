@@ -2,6 +2,7 @@ package RawImageFileRead;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.DecimalFormat;
 
 class ReadRaw {
     public static void main(String[] args) {
@@ -44,6 +45,14 @@ class ReadRaw {
                 standardDeviation[i] /= (height * width);
                 standardDeviation[i] = Math.sqrt(standardDeviation[i]);
             }
+
+            DecimalFormat df = new DecimalFormat("#.#");
+
+            System.out.println("====  RED   GREEN   BLUE");
+            System.out.println("MEAN " + df.format(mean[0]) + "  " + df.format(mean[1]) + "   " + df.format(mean[2]));
+            System.out.println("S.D. " + df.format(standardDeviation[0]) + "   " + df.format(standardDeviation[1]) + "    "
+                    + df.format(standardDeviation[2]));
+
         } catch (Exception e) {
             System.out.println(e);
         }
