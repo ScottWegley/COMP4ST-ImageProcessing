@@ -14,12 +14,17 @@ class ReadRaw {
             System.out.println(planes + " x " + height + " x " + width);
 
             short[][][] image = new short[planes][height][width];
-            for(short i = 0; i < height; i++){
-                for(short j = 0; j < width; j++){
-                    image[0][i][j] = (short) fis.read();
-                    image[1][i][j] = (short) fis.read();
-                    image[2][i][j] = (short) fis.read();
+            double[] mean = new double[] { 0, 0, 0 };
+            double[] standardDeviation = new double[] { 0, 0, 0 };
+
+            for (short i = 0; i < height; i++) {
+                for (short j = 0; j < width; j++) {
+                    for (short q = 0; q < planes; q++) {
+                        image[q][i][j] = (short) fis.read();
+                        mean[q] += image[q][i][j];
+                    }
                 }
+            }
             }
 
         } catch (Exception e) {
