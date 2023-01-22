@@ -30,6 +30,14 @@ class ReadRaw {
                 mean[i] /= (height * width);
             }
 
+            for (short i = 0; i < height; i++) {
+                for (short j = 0; j < width; j++) {
+                    for (short q = 0; q < planes; q++) {
+                        image[q][i][j] -= mean[q];
+                        image[q][i][j] *= image[q][i][j];
+                        standardDeviation[q] += image[q][i][j];
+                    }
+                }
             }
 
         } catch (Exception e) {
