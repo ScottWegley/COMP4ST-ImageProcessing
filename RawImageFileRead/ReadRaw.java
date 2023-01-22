@@ -25,6 +25,11 @@ class ReadRaw {
                     }
                 }
             }
+
+            for (int i = 0; i < planes; i++) {
+                mean[i] /= (height * width);
+            }
+
             }
 
         } catch (Exception e) {
