@@ -6,10 +6,11 @@ import java.io.FileInputStream;
 class ReadRaw {
     public static void main(String[] args) {
         try {
-            FileInputStream fis = new FileInputStream(new File("C:\\Code\\COMP4ST-ImageProcessing\\RawImageFileRead\\random.raw"));
-            byte planes = (byte)fis.read();
-            short height = (short)((fis.read() << 8) + fis.read());
-            short width = (short)((fis.read() << 8) + fis.read());
+            FileInputStream fis = new FileInputStream(
+                    new File("C:\\Code\\COMP4ST-ImageProcessing\\RawImageFileRead\\random.raw"));
+            byte planes = (byte) fis.read();
+            short height = (short) ((fis.read() << 8) + fis.read());
+            short width = (short) ((fis.read() << 8) + fis.read());
             System.out.println(planes + " x " + height + " x " + width);
 
             short[][][] image = new short[planes][height][width];
