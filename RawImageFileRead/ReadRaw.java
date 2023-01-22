@@ -40,6 +40,10 @@ class ReadRaw {
                 }
             }
 
+            for (int i = 0; i < planes; i++) {
+                standardDeviation[i] /= (height * width);
+                standardDeviation[i] = Math.sqrt(standardDeviation[i]);
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
