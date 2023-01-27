@@ -34,8 +34,7 @@ public class ImageIOFormats {
 				intimg[1][y][x]  = (argb >>  8) & 0xFF; // -- GREEN
 				intimg[2][y][x]  = (argb >>  0) & 0xFF; // -- BLUE
 			}
-		}
-		
+		}	
 		return intimg;
 	}
 	
@@ -55,7 +54,6 @@ public class ImageIOFormats {
 		
 			// -- convert BufferedImage -> int[][]
 			int img[][][] = bi2int(bi);
-			
 			
 			// -- convert int[][] -> BufferedImage
 			bi = int2bi(img);
