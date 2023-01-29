@@ -46,7 +46,7 @@ public class ImageIOFormats {
 			System.out.println(formats[i]);
 		}
 
-		String filename = null;
+		String filename = "C:\\Code\\COMP4ST-ImageProcessing\\ImageFileFormats\\Crystal_Project_computer.png";
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(new File(filename));
