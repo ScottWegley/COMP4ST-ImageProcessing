@@ -63,6 +63,9 @@ public class ImageIOFormats {
 			g2d.setColor(Color.RED);
 			g2d.drawLine(0,  0,  bi.getWidth(), bi.getHeight());
 			g2d.drawLine(bi.getWidth(), 0, 0, bi.getHeight());
+			g2d.setColor(Color.GREEN);
+			g2d.setBackground(Color.GREEN);
+			g2d.fillRect(0, 0, bi.getWidth()/2, bi.getHeight()/2);
 			
 			// -- save as a PNG and TIF
 			ImageIO.write(bi, "PNG", new File("selfie.png"));
