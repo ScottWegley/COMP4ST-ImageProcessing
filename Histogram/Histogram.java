@@ -46,6 +46,10 @@ public class Histogram {
             float[] redStat = new float[]{255,0,0,0,0,0};
             float[] grnStat = new float[]{255,0,0,0,0,0};
             float[] bluStat = new float[]{255,0,0,0,0,0};
+            System.out.println("     min:   max:    mean:   dev:   median:   mode:   ");
+            System.out.println("red:   " + redStat[0] + "  " + redStat[1]);
+            System.out.println("grn:   " + grnStat[0] + "  " + grnStat[1]);
+            System.out.println("blu:   " + bluStat[0] + "  " + bluStat[1]);
         } catch (Exception e) {
             e.printStackTrace();
         }
