@@ -30,6 +30,8 @@ public class Histogram {
             System.out.println(bi.getHeight() + "x" + bi.getWidth() + " : " + bi.getType());
             int img[][][] = bi2int(bi);
 
+            String[] colors = new String[]{"red","green","blu"};
+
             int[][] histograms = new int[3][256];
             for (int i = 0; i < bi.getHeight(); i++) {
                 for (int j = 0; j < bi.getWidth(); j++) {
@@ -46,8 +48,6 @@ public class Histogram {
             float[] redStat = new float[]{255,0,0,0,0,0};
             float[] grnStat = new float[]{255,0,0,0,0,0};
             float[] bluStat = new float[]{255,0,0,0,0,0};
-            
-            long[] rgbSums = new long[]{0,0,0};
 
             for (int i = 0; i < histograms[0].length; i++) {
                 //Checking for new maximum
@@ -74,9 +74,10 @@ public class Histogram {
                 redStat[2] += i * histograms[0][i];
                 grnStat[2] += i * histograms[1][i];
                 bluStat[2] += i * histograms[2][i];
-                rgbSums[0] += histograms[0][i];
-                rgbSums[1] += histograms[1][i];
-                rgbSums[2] += histograms[2][i];
+                //Standard Deviation
+                redStat[3] += i*i * histograms[0][i];
+                grnStat[3] += i*i * histograms[1][i];
+                bluStat[3] += i*i * histograms[2][i];
             }
 
             redStat[2] /= bi.getHeight() * bi.getWidth();
