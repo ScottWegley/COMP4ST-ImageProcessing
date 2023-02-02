@@ -46,7 +46,7 @@ public class ImageIOFormats {
 			System.out.println(formats[i]);
 		}
 
-		String filename = "C:\\Code\\COMP4ST-ImageProcessing\\ImageFileFormats\\Crystal_Project_computer.png";
+		String filename = "C:\\Code\\CSC4ST-ImageProcessing\\ImageFileFormats\\Crystal_Project_computer.png";
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(new File(filename));
@@ -68,8 +68,8 @@ public class ImageIOFormats {
 			g2d.fillRect(0, 0, bi.getWidth()/2, bi.getHeight()/2);
 			
 			// -- save as a PNG and TIF
-			ImageIO.write(bi, "PNG", new File("selfie.png"));
-			ImageIO.write(bi, "TIF", new File("selfie.tif"));
+			ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\ImageFileFormats\\selfie.png"));
+			ImageIO.write(bi, "TIF", new File("C:\\Code\\CSC4ST-ImageProcessing\\ImageFileFormats\\selfie.tif"));
 		} catch (IOException e) {
 			System.out.println(e);
 		}
