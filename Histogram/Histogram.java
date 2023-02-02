@@ -46,6 +46,31 @@ public class Histogram {
             float[] redStat = new float[]{255,0,0,0,0,0};
             float[] grnStat = new float[]{255,0,0,0,0,0};
             float[] bluStat = new float[]{255,0,0,0,0,0};
+
+            for (int i = 0; i < histograms[0].length; i++) {
+                //Checking for new maximum
+                if(histograms[0][i] != 0){
+                    redStat[1] = i;
+                }
+                if(histograms[0][255-i] != 0){
+                    redStat[0] = 255-i;
+                }
+                if(histograms[1][i] != 0){
+                    grnStat[1] = i;
+                }
+                //Checking for new minimum
+                if(histograms[1][255-i] != 0){
+                    grnStat[0] = 255-i;
+                }
+                if(histograms[2][i] != 0){
+                    bluStat[1] = i;
+                }
+                if(histograms[2][255-i] != 0){
+                    bluStat[0] = 255-i;
+                }
+                //Calculating the mean.
+            }
+
             System.out.println("     min:   max:    mean:   dev:   median:   mode:   ");
             System.out.println("red:   " + redStat[0] + "  " + redStat[1]);
             System.out.println("grn:   " + grnStat[0] + "  " + grnStat[1]);
