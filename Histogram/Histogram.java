@@ -78,14 +78,25 @@ public class Histogram {
                 rgbSums[1] += histograms[1][i];
                 rgbSums[2] += histograms[2][i];
             }
-            redStat[2] /= rgbSums[0];
-            grnStat[2] /= rgbSums[1];
-            bluStat[2] /= rgbSums[2];
 
-            System.out.println("     min:   max:    mean:   dev:   median:   mode:   ");
-            System.out.println("red:   " + redStat[0] + "  " + redStat[1] + "  " + redStat[2]);
-            System.out.println("grn:   " + grnStat[0] + "  " + grnStat[1] + "  " + grnStat[2]);
-            System.out.println("blu:   " + bluStat[0] + "  " + bluStat[1] + "  " + bluStat[2]);
+            redStat[2] /= bi.getHeight() * bi.getWidth();
+            grnStat[2] /= bi.getHeight() * bi.getWidth();
+            bluStat[2] /= bi.getHeight() * bi.getWidth();
+
+
+            System.out.println("       min:   max:    mean:   dev:   median:   mode:   ");
+            System.out.print("red:   ");
+            for (int i = 0; i < redStat.length; i++) {
+                System.out.print(String.format("%.2f",redStat[i]) + "  ");
+            }
+            System.out.print("\ngrn:   ");
+            for (int i = 0; i < grnStat.length; i++) {
+                System.out.print(String.format("%.2f",grnStat[i]) + "  ");
+            }
+            System.out.print("\nblu:   ");
+            for (int i = 0; i < bluStat.length; i++) {
+                System.out.print(String.format("%.2f",bluStat[i]) + "  ");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
