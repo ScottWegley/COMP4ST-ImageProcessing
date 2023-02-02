@@ -30,6 +30,22 @@ public class Histogram {
             System.out.println(bi.getHeight() + "x" + bi.getWidth() + " : " + bi.getType());
             int img[][][] = bi2int(bi);
 
+            int[][] histograms = new int[3][256];
+            for (int i = 0; i < bi.getHeight(); i++) {
+                for (int j = 0; j < bi.getWidth(); j++) {
+                    int argb = bi.getRGB(j, i);
+                    int red = (argb >> 16) & 0xFF; // -- RED
+                    int green = (argb >> 8) & 0xFF; // -- GREEN
+                    int blue = (argb >> 0) & 0xFF; // -- BLUE
+                    histograms[0][red]++;
+                    histograms[1][green]++;
+                    histograms[2][blue]++;
+                }
+            }
+
+            float[] redStat = new float[]{255,0,0,0,0,0};
+            float[] grnStat = new float[]{255,0,0,0,0,0};
+            float[] bluStat = new float[]{255,0,0,0,0,0};
         } catch (Exception e) {
             e.printStackTrace();
         }
