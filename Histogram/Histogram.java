@@ -46,6 +46,8 @@ public class Histogram {
             float[] redStat = new float[]{255,0,0,0,0,0};
             float[] grnStat = new float[]{255,0,0,0,0,0};
             float[] bluStat = new float[]{255,0,0,0,0,0};
+            
+            long[] rgbSums = new long[]{0,0,0};
 
             for (int i = 0; i < histograms[0].length; i++) {
                 //Checking for new maximum
@@ -69,12 +71,21 @@ public class Histogram {
                     bluStat[0] = 255-i;
                 }
                 //Calculating the mean.
+                redStat[2] += i * histograms[0][i];
+                grnStat[2] += i * histograms[1][i];
+                bluStat[2] += i * histograms[2][i];
+                rgbSums[0] += histograms[0][i];
+                rgbSums[1] += histograms[1][i];
+                rgbSums[2] += histograms[2][i];
             }
+            redStat[2] /= rgbSums[0];
+            grnStat[2] /= rgbSums[1];
+            bluStat[2] /= rgbSums[2];
 
             System.out.println("     min:   max:    mean:   dev:   median:   mode:   ");
-            System.out.println("red:   " + redStat[0] + "  " + redStat[1]);
-            System.out.println("grn:   " + grnStat[0] + "  " + grnStat[1]);
-            System.out.println("blu:   " + bluStat[0] + "  " + bluStat[1]);
+            System.out.println("red:   " + redStat[0] + "  " + redStat[1] + "  " + redStat[2]);
+            System.out.println("grn:   " + grnStat[0] + "  " + grnStat[1] + "  " + grnStat[2]);
+            System.out.println("blu:   " + bluStat[0] + "  " + bluStat[1] + "  " + bluStat[2]);
         } catch (Exception e) {
             e.printStackTrace();
         }
