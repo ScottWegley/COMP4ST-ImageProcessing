@@ -148,7 +148,7 @@ public class Histogram {
             }
             BufferedImage outImg = new BufferedImage(bi.getWidth(), bi.getHeight() + 200, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = (Graphics2D) outImg.getGraphics();
-            g2d.drawImage(bi, 0, 0, bi.getWidth(), bi.getHeight(), 0, 0, bi.getWidth(), bi.getHeight(), Color.WHITE,
+            g2d.drawImage(bi, 0, 0, bi.getWidth(), bi.getHeight(), 0, 0, bi.getWidth(), bi.getHeight(), Color.BLACK,
                     null);
             g2d.fillRect(0, bi.getHeight(), bi.getWidth(), 200);
 
