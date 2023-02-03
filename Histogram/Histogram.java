@@ -80,6 +80,13 @@ public class Histogram {
                 bluStat[3] += i*i * histograms[2][i];
             }
 
+            redStat[3] = (float) Math.sqrt((redStat[3] - ((redStat[2] * redStat[2]) / (bi.getHeight() * bi.getWidth())))
+                    / (bi.getHeight() * bi.getWidth()));
+            grnStat[3] = (float) Math.sqrt((grnStat[3] - ((grnStat[2] * grnStat[2]) / (bi.getHeight() * bi.getWidth())))
+                    / (bi.getHeight() * bi.getWidth()));
+            bluStat[3] = (float) Math.sqrt((bluStat[3] - ((bluStat[2] * bluStat[2]) / (bi.getHeight() * bi.getWidth())))
+                    / (bi.getHeight() * bi.getWidth()));
+
             redStat[2] /= bi.getHeight() * bi.getWidth();
             grnStat[2] /= bi.getHeight() * bi.getWidth();
             bluStat[2] /= bi.getHeight() * bi.getWidth();
