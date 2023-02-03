@@ -74,10 +74,29 @@ public class Histogram {
                 redStat[2] += i * histograms[0][i];
                 grnStat[2] += i * histograms[1][i];
                 bluStat[2] += i * histograms[2][i];
-                //Standard Deviation
-                redStat[3] += i*i * histograms[0][i];
-                grnStat[3] += i*i * histograms[1][i];
-                bluStat[3] += i*i * histograms[2][i];
+                // Calculating the Median
+                redStat[4] += histograms[0][i];
+                grnStat[4] += histograms[1][i];
+                bluStat[4] += histograms[2][i];
+                if (redStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                    rMed = i;
+                }
+                if (grnStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                    gMed = i;
+                }
+                if (bluStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                    bMed = i;
+                }
+                // Calculating the Mode
+                if (histograms[0][i] > histograms[0][(int) redStat[5]]) {
+                    redStat[5] = i;
+                }
+                if (histograms[1][i] > histograms[1][(int) grnStat[5]]) {
+                    grnStat[5] = i;
+                }
+                if (histograms[2][i] > histograms[2][(int) bluStat[5]]) {
+                    bluStat[5] = i;
+                }
             }
 
             redStat[3] = (float) Math.sqrt((redStat[3] - ((redStat[2] * redStat[2]) / (bi.getHeight() * bi.getWidth())))
@@ -91,6 +110,9 @@ public class Histogram {
             grnStat[2] /= bi.getHeight() * bi.getWidth();
             bluStat[2] /= bi.getHeight() * bi.getWidth();
 
+            redStat[4] = rMed;
+            grnStat[4] = gMed;
+            bluStat[4] = bMed;
 
             System.out.println("       min:   max:    mean:   dev:   median:   mode:   ");
             System.out.print("red:   ");
