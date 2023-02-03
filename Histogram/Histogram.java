@@ -29,7 +29,6 @@ public class Histogram {
         BufferedImage bi = null;
         try {
             bi = ImageIO.read(new File(filename));
-            System.out.println(bi.getHeight() + "x" + bi.getWidth() + " : " + bi.getType());
             int img[][][] = bi2int(bi);
 
             int[][] histograms = new int[3][256];
