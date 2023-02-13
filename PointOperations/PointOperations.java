@@ -248,13 +248,13 @@ public class PointOperations {
                     bMed = i;
                 }
                 // Calculating 5th Percentile
-                if (redStat[4] <= (bi.getWidth() * bi.getHeight()) / 20) {
+                if (redStat[4] <= (bi.getWidth() * bi.getHeight()) * .05) {
                     fifthPercentile[0] = i;
                 }
-                if (grnStat[4] <= (bi.getWidth() * bi.getHeight()) / 20) {
+                if (grnStat[4] <= (bi.getWidth() * bi.getHeight()) * .05) {
                     fifthPercentile[1] = i;
                 }
-                if (bluStat[4] <= (bi.getWidth() * bi.getHeight()) / 20) {
+                if (bluStat[4] <= (bi.getWidth() * bi.getHeight()) * .05) {
                     fifthPercentile[2] = i;
                 }
                 // Calculating 90th Percentile
@@ -316,14 +316,8 @@ public class PointOperations {
             for (int i = 0; i < bi.getHeight(); i++) {
                 for (int j = 0; j < bi.getWidth(); j++) {
                     for (int plane = 0; plane < 3; plane++) {
-                        if(plane == 0){
-                            //System.out.print(img[plane][i][j] + " - > ");
-                        }
-                        double result = factor * (img[plane][i][j] - fifthPercentile[1]) + 0;
+                        double result = factor * (img[plane][i][j] - fifthPercentile[1]);
                         img[plane][i][j] = (int) (result > 255 ? 255 : (result < 0 ? 0 : result));
-                        if(plane == 0){
-                            //System.out.print(result + '\n');
-                        }
                     }
                 }
             }
@@ -344,8 +338,92 @@ public class PointOperations {
                 }
             }
             // Calculate Modified Statistics
- 
-            //Print Modified Statistics
+            redStat = new float[] { 255, 0, 0, 0, 0, 0 };
+            grnStat = new float[] { 255, 0, 0, 0, 0, 0 };
+            bluStat = new float[] { 255, 0, 0, 0, 0, 0 };
+            rMed = 0;
+            gMed = 0;
+            bMed = 0;
+            maxPixels = 0;
+            for (int i = 0; i < histograms[0].length; i++) {
+                // Checking for highest pixel count
+                if (histograms[0][i] > maxPixels) {
+                    maxPixels = histograms[0][i];
+                }
+                if (histograms[1][i] > maxPixels) {
+                    maxPixels = histograms[1][i];
+                }
+                if (histograms[2][i] > maxPixels) {
+                    maxPixels = histograms[2][i];
+                }
+                // Checking for new maximum bin
+                if (histograms[0][i] != 0) {
+                    redStat[1] = i;
+                }
+                if (histograms[0][255 - i] != 0) {
+                    redStat[0] = 255 - i;
+                }
+                if (histograms[1][i] != 0) {
+                    grnStat[1] = i;
+                }
+                // Checking for new minimum
+                if (histograms[1][255 - i] != 0) {
+                    grnStat[0] = 255 - i;
+                }
+                if (histograms[2][i] != 0) {
+                    bluStat[1] = i;
+                }
+                if (histograms[2][255 - i] != 0) {
+                    bluStat[0] = 255 - i;
+                }
+                 // Calculating the mean.
+                 redStat[2] += i * histograms[0][i];
+                 grnStat[2] += i * histograms[1][i];
+                 bluStat[2] += i * histograms[2][i];
+                 // Standard Deviation
+                 redStat[3] += i * i * histograms[0][i];
+                 grnStat[3] += i * i * histograms[1][i];
+                 bluStat[3] += i * i * histograms[2][i];
+                 // Calculating the Median
+                 redStat[4] += histograms[0][i];
+                 grnStat[4] += histograms[1][i];
+                 bluStat[4] += histograms[2][i];
+                 if (redStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                     rMed = i;
+                 }
+                 if (grnStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                     gMed = i;
+                 }
+                 if (bluStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                     bMed = i;
+                 }
+                // Calculating the Mode
+                if (histograms[0][i] > histograms[0][(int) redStat[5]]) {
+                    redStat[5] = i;
+                }
+                if (histograms[1][i] > histograms[1][(int) grnStat[5]]) {
+                    grnStat[5] = i;
+                }
+                if (histograms[2][i] > histograms[2][(int) bluStat[5]]) {
+                    bluStat[5] = i;
+                }
+            }
+
+            redStat[3] = (float) Math.sqrt((redStat[3] - ((redStat[2] * redStat[2]) / (bi.getHeight() * bi.getWidth())))
+                    / (bi.getHeight() * bi.getWidth() * -1));
+            grnStat[3] = (float) Math.sqrt((grnStat[3] - ((grnStat[2] * grnStat[2]) / (bi.getHeight() * bi.getWidth())))
+                    / (bi.getHeight() * bi.getWidth() * -1));
+            bluStat[3] = (float) Math.sqrt((bluStat[3] - ((bluStat[2] * bluStat[2]) / (bi.getHeight() * bi.getWidth())))
+                    / (bi.getHeight() * bi.getWidth() * -1));
+
+            redStat[2] /= bi.getHeight() * bi.getWidth();
+            grnStat[2] /= bi.getHeight() * bi.getWidth();
+            bluStat[2] /= bi.getHeight() * bi.getWidth();
+
+            redStat[4] = rMed;
+            grnStat[4] = gMed;
+            bluStat[4] = bMed;
+            // Print Modified Statistics
             System.out.println("New Statistics");
             System.out.println("       min:   max:    mean:   dev:  median: mode: ");
             System.out.print("red:   ");
