@@ -376,27 +376,27 @@ public class PointOperations {
                 if (histograms[2][255 - i] != 0) {
                     bluStat[0] = 255 - i;
                 }
-                 // Calculating the mean.
-                 redStat[2] += i * histograms[0][i];
-                 grnStat[2] += i * histograms[1][i];
-                 bluStat[2] += i * histograms[2][i];
-                 // Standard Deviation
-                 redStat[3] += i * i * histograms[0][i];
-                 grnStat[3] += i * i * histograms[1][i];
-                 bluStat[3] += i * i * histograms[2][i];
-                 // Calculating the Median
-                 redStat[4] += histograms[0][i];
-                 grnStat[4] += histograms[1][i];
-                 bluStat[4] += histograms[2][i];
-                 if (redStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
-                     rMed = i;
-                 }
-                 if (grnStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
-                     gMed = i;
-                 }
-                 if (bluStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
-                     bMed = i;
-                 }
+                // Calculating the mean.
+                redStat[2] += i * histograms[0][i];
+                grnStat[2] += i * histograms[1][i];
+                bluStat[2] += i * histograms[2][i];
+                // Standard Deviation
+                redStat[3] += i * i * histograms[0][i];
+                grnStat[3] += i * i * histograms[1][i];
+                bluStat[3] += i * i * histograms[2][i];
+                // Calculating the Median
+                redStat[4] += histograms[0][i];
+                grnStat[4] += histograms[1][i];
+                bluStat[4] += histograms[2][i];
+                if (redStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                    rMed = i;
+                }
+                if (grnStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                    gMed = i;
+                }
+                if (bluStat[4] <= (bi.getWidth() * bi.getHeight()) / 2) {
+                    bMed = i;
+                }
                 // Calculating the Mode
                 if (histograms[0][i] > histograms[0][(int) redStat[5]]) {
                     redStat[5] = i;
@@ -410,11 +410,11 @@ public class PointOperations {
             }
 
             redStat[3] = (float) Math.sqrt((redStat[3] - ((redStat[2] * redStat[2]) / (bi.getHeight() * bi.getWidth())))
-                    / (bi.getHeight() * bi.getWidth() * -1));
+                    / (bi.getHeight() * bi.getWidth()));
             grnStat[3] = (float) Math.sqrt((grnStat[3] - ((grnStat[2] * grnStat[2]) / (bi.getHeight() * bi.getWidth())))
-                    / (bi.getHeight() * bi.getWidth() * -1));
+                    / (bi.getHeight() * bi.getWidth()));
             bluStat[3] = (float) Math.sqrt((bluStat[3] - ((bluStat[2] * bluStat[2]) / (bi.getHeight() * bi.getWidth())))
-                    / (bi.getHeight() * bi.getWidth() * -1));
+                    / (bi.getHeight() * bi.getWidth()));
 
             redStat[2] /= bi.getHeight() * bi.getWidth();
             grnStat[2] /= bi.getHeight() * bi.getWidth();
