@@ -1,3 +1,4 @@
+package Library;
 import java.awt.image.BufferedImage;
 
 public class ImageEditor {

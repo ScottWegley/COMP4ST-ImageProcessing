@@ -3,6 +3,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import Library.ImageEditor;
+
 class Otsu {
     // -- outline for computing the threshold of a single image plane
     public static int otsu(int[][] img) {
