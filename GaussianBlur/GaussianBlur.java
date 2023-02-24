@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import Library.ImageEditor;
+import Library.ImageEditor.OPERATION;
 
 public class GaussianBlur {
 
@@ -89,10 +90,36 @@ public class GaussianBlur {
                 convimg[c] = convolve(img[c], gaussian, true);
                 convimg2[c] = convolve(img[c], gaussian2, true);
             }
-            bi = ImageEditor.int2bi(convimg);
-            ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur1.png"));
-            bi = ImageEditor.int2bi(convimg2);
-            ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur2.png"));
+            // bi = ImageEditor.int2bi(convimg);
+            // ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur1.png"));
+            // bi = ImageEditor.int2bi(convimg2);
+            // ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur2.png"));
+            int[][][] diffImg = ImageEditor.alter(convimg2, convimg, OPERATION.SUB);
+            int[] thresholds = new int[3];
+            for (int i = 0; i < 3; i++) {
+                thresholds[i] = ImageEditor.otsu(diffImg[i]);
+            }
+            int output[][][] = ImageEditor.binarize(diffImg, thresholds);
+            int redOut[][][] = new int[3][bi.getHeight()][bi.getWidth()];
+            int grnOut[][][] = new int[3][bi.getHeight()][bi.getWidth()];
+            int bluOut[][][] = new int[3][bi.getHeight()][bi.getWidth()];
+            for (int i = 0; i < bi.getHeight(); i++) {
+                for (int j = 0; j < bi.getWidth(); j++) {
+                    for (int c = 0; c < 3; c++) {
+                        redOut[c][i][j] = output[0][i][j];
+                        grnOut[c][i][j] = output[1][i][j];
+                        bluOut[c][i][j] = output[2][i][j];
+                    }
+                }
+            }
+            BufferedImage oImg = ImageEditor.int2bi(output);
+            BufferedImage rImg = ImageEditor.int2bi(redOut);
+            BufferedImage gImg = ImageEditor.int2bi(grnOut);
+            BufferedImage bImg = ImageEditor.int2bi(bluOut);
+            ImageIO.write(oImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\oOutput.png"));
+            ImageIO.write(rImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\rOutput.png"));
+            ImageIO.write(gImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\gOutput.png"));
+            ImageIO.write(bImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\bOutput.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,5 @@
 package Library;
+
 import java.awt.image.BufferedImage;
 
 public class ImageEditor {
@@ -72,7 +73,7 @@ public class ImageEditor {
         return output;
     }
 
-    public static int[][][] binarize(int[][][] img, int[] thresholds /*, boolean auto */) {
+    public static int[][][] binarize(int[][][] img, int[] thresholds /* , boolean auto */) {
         int p = img.length;
         int h = img[0].length;
         int w = img[0][0].length;
@@ -88,6 +89,82 @@ public class ImageEditor {
         }
 
         return output;
+    }
+
+    public static int otsu(int[][] img) {
+        int height = img.length;
+        int width = img[0].length;
+
+        // -- histogram
+        int[] histogram = new int[256];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                histogram[img[i][j]]++;
+            }
+        }
+
+        double pixeltotal = 0;
+        // -- the total sum of all image pixel values
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                pixeltotal += img[i][j];
+            }
+        }
+
+        double sumB = 0;
+        int wB = 0;
+        int wF = 0;
+
+        // -- the resultant (selected) threshold
+        int threshold = 0;
+
+        double varMax = 0;
+
+        // -- loop through all possible thresholds
+        for (int t = 0; t < histogram.length; t++) {
+
+            // -- set the background weight to number of pixels
+            // in the histogram below the current threshold
+            // Note: this sum accumulates over loop indices
+            wB += histogram[t];
+
+            // -- if wB == 0 then there are no pixels in the background class, try next
+            // threshold
+            if (wB == 0)
+                continue;
+
+            // -- set the foreground weight to the remaining
+            // number of pixels (
+            wF = (height * width) - wB;
+
+            // -- if wF == 0 all pixels are in the foreground class, done
+            if (wF == 0)
+                break;
+
+            // -- sum of pixel values at this threshold
+            sumB += (double) (t * histogram[t]);
+
+            // -- mean of the background for this threshold
+            double mB = sumB / wB;
+
+            // -- mean of the foreground for this threshold
+            double mF = (pixeltotal - sumB) / wF;
+
+            // -- Variance is a measure of dispersion, how far a set of numbers
+            // is spread out from their average value.
+            // Between class variance is a measure of how far one set mean
+            // is from the other
+            // p(0) * p(1) * (mean(0) - mean(1))^2
+            double varBetween = (double) wB * (double) wF * (mB - mF) * (mB - mF);
+            // -- look to maximize the variance between the two classes which
+            // will give us the maximal distance between the means of the two classes
+            if (varBetween > varMax) {
+                varMax = varBetween;
+                threshold = t;
+            }
+        }
+
+        return threshold;
     }
 
     public static int[][][] lookup(int[][][] img, int[][] lut) {
