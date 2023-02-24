@@ -81,18 +81,18 @@ public class GaussianBlur {
             bi = ImageIO.read(new File(filename));
             int[][][] img = ImageEditor.bi2int(bi);
             int[][][] convimg = new int[3][0][0];
-            double gaussian[][] = generateGaussian(0, 0, 4, 4, 1, 11, 11);
-            for (double[] row : gaussian) {
-                for (double col : row) {
-                    System.out.printf("%7.3f ", col);
-                }
-                System.out.println();
-            }
+            int[][][] convimg2 = new int[3][0][0];
+            double gaussian[][] = generateGaussian(0, 0, 1, 1, 1, 11, 11);
+            double gaussian2[][] = generateGaussian(0, 0, 2, 2, 1, 11, 11) ;
+
             for (int c = 0; c < img.length; c++) {
                 convimg[c] = convolve(img[c], gaussian, true);
+                convimg2[c] = convolve(img[c], gaussian2, true);
             }
             bi = ImageEditor.int2bi(convimg);
-            ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur.png"));
+            ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur1.png"));
+            bi = ImageEditor.int2bi(convimg2);
+            ImageIO.write(bi, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\GaussianBlur\\blur2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
