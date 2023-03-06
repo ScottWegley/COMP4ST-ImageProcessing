@@ -24,20 +24,35 @@ class EdgeDetection {
                     { -1, 0, 1 } };
             int[][][] horImg = new int[3][0][0];
             int[][][] verImg = new int[3][0][0];
+            int[][][] magImg = new int[3][img[0].length][img[0][0].length];
+            int[][][] orImg = new int[3][img[0].length][img[0][0].length];
             for (int i = 0; i < 3; i++) {
                 horImg[i] = ImageEditor.convolve(img[i], horMask, false);
                 verImg[i] = ImageEditor.convolve(img[i], verMask, false);
             }
             horImg = ImageEditor.scale(horImg, 0, 255);
             verImg = ImageEditor.scale(verImg, 0, 255);
+            for (int c = 0; c < img.length; c++) {
+                for (int i = 0; i < img[0].length; i++) {
+                    for (int j = 0; j < img[0][0].length; j++) {
+                        magImg[c][i][j] = (int) Math
+                                .round(Math.sqrt(Math.pow(horImg[c][i][j], 2) + Math.pow(verImg[c][i][j], 2)));
+                        orImg[c][i][j] = (int) Math.atan2(horImg[c][i][j], verImg[c][i][j]);
+                        magImg[c][i][j] = magImg[c][i][j] > 255 ? 255 : (magImg[c][i][j] < 0 ? 0 : magImg[c][i][j]);
+                        orImg[c][i][j] = orImg[c][i][j] > 255 ? 255 : (orImg[c][i][j] < 0 ? 0 : orImg[c][i][j]);
+                    }
+                }
+            }
+            magImg = ImageEditor.scale(magImg, 0, 255);
+            orImg = ImageEditor.scale(orImg, 0, 255);
             BufferedImage outiH = ImageEditor.int2bi(horImg);
             BufferedImage outiV = ImageEditor.int2bi(verImg);
-            // BufferedImage outMag = ImageEditor.int2bi(output);
-            // BufferedImage outOr = ImageEditor.int2bi(output);
+            BufferedImage outMag = ImageEditor.int2bi(magImg);
+            BufferedImage outOr = ImageEditor.int2bi(orImg);
             ImageIO.write(outiH, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outiH.png"));
             ImageIO.write(outiV, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outiV.png"));
-            // ImageIO.write(outMag, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outMag.png"));
-            // ImageIO.write(outOr, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outOr.png"));
+            ImageIO.write(outMag, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outMag.png"));
+            ImageIO.write(outOr, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outOr.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
