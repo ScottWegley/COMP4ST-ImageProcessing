@@ -7,6 +7,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import Library.ImageEditor;
+
 public class PointOperations {
 
     public static enum OPERATION {
@@ -312,7 +314,7 @@ public class PointOperations {
 
             System.out.println();
             // Scale original Image
-            float factor = (255 - 0) / (ninetyPercentile[1] - fifthPercentile[1]);
+            /* float factor = (255 - 0) / (ninetyPercentile[1] - fifthPercentile[1]);
             for (int i = 0; i < bi.getHeight(); i++) {
                 for (int j = 0; j < bi.getWidth(); j++) {
                     for (int plane = 0; plane < 3; plane++) {
@@ -320,7 +322,8 @@ public class PointOperations {
                         img[plane][i][j] = (int) (result > 255 ? 255 : (result < 0 ? 0 : result));
                     }
                 }
-            }
+            } */
+            img = ImageEditor.scale(img, 0, 255);
             bi = int2bi(img);
             // Draw Modified Image
             BufferedImage outImg = new BufferedImage(bi.getWidth(), bi.getHeight() + 200, BufferedImage.TYPE_INT_RGB);

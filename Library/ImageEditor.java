@@ -7,6 +7,100 @@ public class ImageEditor {
         ADD, SUB, MUL, DIV
     }
 
+    public static int[][] convolve(int in[][], double[][] mask, boolean normalize) throws IllegalArgumentException {
+        int mheight = mask.length;
+        int mwidth = mask[0].length;
+        if (mheight % 2 == 0 || mwidth % 2 == 0) {
+            throw new IllegalArgumentException("Mask size must be odd");
+        }
+
+        if (normalize) {
+            double sum = 0.0;
+            for (int i = 0; i < mask.length; i++) {
+                for (int j = 0; j < mask[0].length; j++) {
+                    sum += mask[i][j];
+                }
+            }
+            for (int i = 0; i < mask.length; i++) {
+                for (int j = 0; j < mask[0].length; j++) {
+                    mask[i][j] /= sum;
+                }
+            }
+        }
+
+        int height = in.length;
+        int width = in[0].length;
+
+        int out[][] = new int[height][width];
+
+        // Two loops for getting every pixel;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                double sum = 0;
+
+                for (int k = -mheight / 2; k <= mheight / 2; k++) {
+                    for (int l = -mwidth / 2; l <= mwidth / 2; l++) {
+                        try {
+                            sum += in[i + k][j + l] * mask[k + mheight / 2][l + mwidth / 2];
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                        }
+                    }
+                }
+                out[i][j] = (int) (sum < 0 ? 0 : (sum > 255 ? 255 : sum));
+            }
+        }
+
+        return out;
+    }
+
+    public static int[][][] scale(int[][][] img, int outMin, int outMax) {
+        int[][] histograms = new int[3][256];
+        for (int i = 0; i < img[0].length; i++) {
+            for (int j = 0; j < img[0][0].length; j++) {
+                int red = img[0][i][j];
+                int green = img[1][i][j];
+                int blue = img[2][i][j];
+                histograms[0][red]++;
+                histograms[1][green]++;
+                histograms[2][blue]++;
+            }
+        }
+        float[][] Stats = new float[][] {
+                { 255, 0 },
+                { 255, 0 },
+                { 255, 0 }
+        };
+        for (int i = 0; i < histograms[0].length; i++) {
+            if (histograms[0][i] != 0) {
+                Stats[0][1] = i;
+            }
+            if (histograms[1][i] != 0) {
+                Stats[1][1] = i;
+            }
+            if (histograms[2][i] != 0) {
+                Stats[2][1] = i;
+            }
+            if (histograms[0][255 - i] != 0) {
+                Stats[0][0] = 255 - i;
+            }
+            if (histograms[1][255 - i] != 0) {
+                Stats[1][0] = 255 - i;
+            }
+            if (histograms[2][255 - i] != 0) {
+                Stats[2][0] = 255 - i;
+            }
+        }
+        for (int i = 0; i < img[0].length; i++) {
+            for (int j = 0; j < img[0][0].length; j++) {
+                for (int plane = 0; plane < 3; plane++) {
+                    double result = (img[plane][i][j] - Stats[plane][0])/(Stats[plane][1] - Stats[plane][0]) * (outMax - outMin) + outMin;
+                    img[plane][i][j] = (int) (result > 255 ? 255 : (result < 0 ? 0 : result));
+                }
+            }
+        }
+        return img;
+    }
+
     public static int[][][] alter(int[][][] img, double[] scalars, OPERATION op) {
         int p = img.length;
         int h = img[0].length;

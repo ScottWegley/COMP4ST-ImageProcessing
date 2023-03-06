@@ -25,7 +25,7 @@ public class Histogram {
     }
 
     public static void main(String[] args) {
-        String filename = "C:\\Code\\CSC4ST-ImageProcessing\\Histogram\\spheres.png";
+        String filename = "C:\\Code\\CSC4ST-ImageProcessing\\Histogram\\GrayImage.png";
         BufferedImage bi = null;
         try {
             bi = ImageIO.read(new File(filename));
