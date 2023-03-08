@@ -27,11 +27,9 @@ class EdgeDetection {
             int[][][] magImg = new int[3][img[0].length][img[0][0].length];
             int[][][] orImg = new int[3][img[0].length][img[0][0].length];
             for (int i = 0; i < 3; i++) {
-                horImg[i] = ImageEditor.convolve(img[i], horMask, false);
-                verImg[i] = ImageEditor.convolve(img[i], verMask, false);
+                horImg[i] = ImageEditor.convolve(img[i], horMask, false, false);
+                verImg[i] = ImageEditor.convolve(img[i], verMask, false, false);
             }
-            horImg = ImageEditor.scale(horImg, 0, 255);
-            verImg = ImageEditor.scale(verImg, 0, 255);
             for (int c = 0; c < img.length; c++) {
                 for (int i = 0; i < img[0].length; i++) {
                     for (int j = 0; j < img[0][0].length; j++) {
@@ -45,8 +43,8 @@ class EdgeDetection {
             }
             magImg = ImageEditor.scale(magImg, 0, 255);
             orImg = ImageEditor.scale(orImg, 0, 255);
-            BufferedImage outiH = ImageEditor.int2bi(horImg);
-            BufferedImage outiV = ImageEditor.int2bi(verImg);
+            BufferedImage outiH = ImageEditor.int2bi(ImageEditor.scale(horImg, 0, 255));
+            BufferedImage outiV = ImageEditor.int2bi( ImageEditor.scale(verImg, 0, 255));
             BufferedImage outMag = ImageEditor.int2bi(magImg);
             BufferedImage outOr = ImageEditor.int2bi(orImg);
             ImageIO.write(outiH, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\SobelEdgeDetection\\outiH.png"));

@@ -7,7 +7,8 @@ public class ImageEditor {
         ADD, SUB, MUL, DIV
     }
 
-    public static int[][] convolve(int in[][], double[][] mask, boolean normalize) throws IllegalArgumentException {
+    public static int[][] convolve(int in[][], double[][] mask, boolean normalize, boolean clamp)
+            throws IllegalArgumentException {
         int mheight = mask.length;
         int mwidth = mask[0].length;
         if (mheight % 2 == 0 || mwidth % 2 == 0) {
@@ -46,59 +47,55 @@ public class ImageEditor {
                         }
                     }
                 }
-                out[i][j] = (int) (sum < 0 ? 0 : (sum > 255 ? 255 : sum));
+                if (clamp) {
+                    out[i][j] = (int) (sum < 0 ? 0 : (sum > 255 ? 255 : sum));
+                } else {
+                    out[i][j] = (int) sum;
+                }
             }
         }
 
         return out;
     }
 
-    public static int[][][] scale(int[][][] img, int outMin, int outMax) {
-        int[][] histograms = new int[3][256];
+    public static int[][][] scale(int[][][] img, double outMin, double outMax) {
+        double[] mins = new double[] { 255, 255, 255 };
+        double[] maxs = new double[] { 0, 0, 0 };
+        int[][][] out = new int[img.length][img[0].length][img[0][0].length];
         for (int i = 0; i < img[0].length; i++) {
             for (int j = 0; j < img[0][0].length; j++) {
-                int red = img[0][i][j];
-                int green = img[1][i][j];
-                int blue = img[2][i][j];
-                histograms[0][red]++;
-                histograms[1][green]++;
-                histograms[2][blue]++;
-            }
-        }
-        float[][] Stats = new float[][] {
-                { 255, 0 },
-                { 255, 0 },
-                { 255, 0 }
-        };
-        for (int i = 0; i < histograms[0].length; i++) {
-            if (histograms[0][i] != 0) {
-                Stats[0][1] = i;
-            }
-            if (histograms[1][i] != 0) {
-                Stats[1][1] = i;
-            }
-            if (histograms[2][i] != 0) {
-                Stats[2][1] = i;
-            }
-            if (histograms[0][255 - i] != 0) {
-                Stats[0][0] = 255 - i;
-            }
-            if (histograms[1][255 - i] != 0) {
-                Stats[1][0] = 255 - i;
-            }
-            if (histograms[2][255 - i] != 0) {
-                Stats[2][0] = 255 - i;
-            }
-        }
-        for (int i = 0; i < img[0].length; i++) {
-            for (int j = 0; j < img[0][0].length; j++) {
-                for (int plane = 0; plane < 3; plane++) {
-                    double result = (img[plane][i][j] - Stats[plane][0])/(Stats[plane][1] - Stats[plane][0]) * (outMax - outMin) + outMin;
-                    img[plane][i][j] = (int) (result > 255 ? 255 : (result < 0 ? 0 : result));
+                if (img[0][i][j] > maxs[0]) {
+                    maxs[0] = img[0][i][j];
+                }
+                if (img[0][i][j] < mins[0]) {
+                    mins[0] = img[0][i][j];
+                }
+                if (img[1][i][j] > maxs[1]) {
+                    maxs[1] = img[1][i][j];
+                }
+                if (img[1][i][j] < mins[1]) {
+                    mins[1] = img[1][i][j];
+                }
+                if (img[2][i][j] > maxs[2]) {
+                    maxs[2] = img[2][i][j];
+                }
+                if (img[2][i][j] < mins[2]) {
+                    mins[2] = img[2][i][j];
                 }
             }
         }
-        return img;
+        double[] sfs = { (outMax - outMin) / (maxs[0] - mins[0]),
+                (outMax - outMin) / (maxs[1] - mins[1]),
+                (outMax - outMin) / (maxs[2] - mins[2]) };
+        for (int plane = 0; plane < 3; plane++) {
+            for (int i = 0; i < img[0].length; i++) {
+                for (int j = 0; j < img[0][0].length; j++) {
+                    double result = sfs[plane] * (img[plane][i][j] - mins[plane]) + outMin;
+                    out[plane][i][j] = (int) (result > 255 ? 255 : (result < 0 ? 0 : result));
+                }
+            }
+        }
+        return out;
     }
 
     public static int[][][] alter(int[][][] img, double[] scalars, OPERATION op) {
