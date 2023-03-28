@@ -109,6 +109,9 @@ class Otsu {
             BufferedImage rImg = ImageEditor.int2bi(redOut);
             BufferedImage gImg = ImageEditor.int2bi(grnOut);
             BufferedImage bImg = ImageEditor.int2bi(bluOut);
+            BufferedImage oImg = ImageEditor.int2bi(output);
+
+            ImageIO.write(oImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\OtsuAutoThreshold\\oOutput.png"));
             ImageIO.write(rImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\OtsuAutoThreshold\\rOutput.png"));
             ImageIO.write(gImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\OtsuAutoThreshold\\gOutput.png"));
             ImageIO.write(bImg, "PNG", new File("C:\\Code\\CSC4ST-ImageProcessing\\OtsuAutoThreshold\\bOutput.png"));
