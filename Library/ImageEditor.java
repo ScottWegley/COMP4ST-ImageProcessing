@@ -1,6 +1,10 @@
 package Library;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class ImageEditor {
     public static enum OPERATION {
@@ -320,5 +324,13 @@ public class ImageEditor {
             }
         }
         return bi;
+    }
+
+    public static BufferedImage readImg(String path) throws IOException{
+        return ImageIO.read(new File(path));
+    }
+
+    public static void writePNG(BufferedImage bi, String path) throws IOException{
+        ImageIO.write(bi, "PNG", new File(path));
     }
 }
