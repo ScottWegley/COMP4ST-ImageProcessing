@@ -64,28 +64,32 @@ public class Morphology {
         return ImageEditor.scale(output, 0, 255);
     }
 
-        ArrayList<Integer> list = new ArrayList<Integer>();
-
-        for (int c = 0; c < out.length; c++) {
-            // Two loops for getting every pixel;
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    list.clear();
-                    for (int k = -rows / 2; k <= rows / 2; k++) {
-                        for (int l = -cols / 2; l <= cols / 2; l++) {
-                            try {
-                                list.add(in[c][i + k][j + l]);
-                            } catch (ArrayIndexOutOfBoundsException e) {
+    private static int[][][] erode(int[][][] input, int[][] struc, int xCen, int yCen) {
+        int[][][] output = new int[input.length][input[0].length][input[0][0].length];
+        input = ImageEditor.scale(input, 0, 1);
+        for (int plane = 0; plane < input.length; plane++) {
+            for (int i = 0; i < input[0].length; i++) {
+                for (int j = 0; j < input[0][0].length; j++) {
+                    // For every pixel
+                    try {
+                        if (input[plane][i][j] == 1) {
+                            boolean express = true;
+                            for (int xOff = 0 - xCen; xOff < struc.length - xCen; xOff++) {
+                                for (int yOff = 0 - yCen; yOff < struc.length - yCen; yOff++) {
+                                    if(input[plane][i + xOff][j + yOff] == 0 && struc[xCen + xOff][yCen + yOff] == 1){
+                                        express = false;
+                                    }
+                                }
                             }
+                            output[plane][i][j] = (express ? 1 : 0);
                         }
+                    } catch (Exception e) {
+                        System.out.println(e.getStackTrace());
                     }
-                    Collections.sort(list);
-                    out[c][i][j] = list.get(list.size() / 2);
                 }
             }
         }
-
-        return out;
+        return ImageEditor.scale(output, 0, 255);
     }
 
     public static void main(String[] args) {
