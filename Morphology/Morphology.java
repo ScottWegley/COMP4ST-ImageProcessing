@@ -40,7 +40,29 @@ public class Morphology {
             }
     };
 
-        int out[][][] = new int[comps][height][width];
+    private static int[][][] dilate(int[][][] input, int[][] struc, int xCen, int yCen) {
+        int[][][] output = new int[input.length][input[0].length][input[0][0].length];
+        input = ImageEditor.scale(input, 0, 1);
+        for (int plane = 0; plane < input.length; plane++) {
+            for (int i = 0; i < input[0].length; i++) {
+                for (int j = 0; j < input[0][0].length; j++) {
+                    // For every pixel
+                    try {
+                        if (input[plane][i][j] == 1) {
+                            for (int xOff = 0 - xCen; xOff < struc.length - xCen; xOff++) {
+                                for (int yOff = 0 - yCen; yOff < struc.length - yCen; yOff++) {
+                                    output[plane][i + xOff][j + yOff] = struc[xCen + xOff][yCen + yOff];
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getStackTrace());
+                    }
+                }
+            }
+        }
+        return ImageEditor.scale(output, 0, 255);
+    }
 
         ArrayList<Integer> list = new ArrayList<Integer>();
 
