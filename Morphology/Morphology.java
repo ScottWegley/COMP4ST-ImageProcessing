@@ -1,20 +1,21 @@
 package Morphology;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import Library.ImageEditor;
 
 public class Morphology {
 
-    public static int[][][] median(int in[][][], int rows, int cols)
-            throws IllegalArgumentException {
-        if (rows % 2 == 0 || cols % 2 == 0) {
-            throw new IllegalArgumentException("Mask size must be odd");
+    private static int[][] genStruc(int sizeSqr, int fillVal) {
+        int[][] out = new int[sizeSqr][sizeSqr];
+        for (int i = 0; i < out.length; i++) {
+            for (int j = 0; j < out[0].length; j++) {
+                out[i][j] = fillVal;
+            }
         }
+        return out;
+    }
 
         int comps = in.length;
         int height = in[0].length;
@@ -46,14 +47,17 @@ public class Morphology {
         return out;
     }
 
-
     public static void main(String[] args) {
         try {
-            BufferedImage bi = ImageEditor.readImg("C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\Shapes.PNG");
-            ImageEditor.writePNG(ImageEditor.int2bi(median(ImageEditor.bi2int(bi), 3, 3)), "C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\out.PNG");
+            BufferedImage bi = ImageEditor
+                    .readImg("C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\WhiteSquareWithNoise.PNG");
+            int[][][] img = ImageEditor.bi2int(bi);
+            ImageEditor.writePNG(ImageEditor.int2bi(erode(img, genStruc(5, 1), 2, 2)),
+                    "C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\Out.PNG");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
 }
