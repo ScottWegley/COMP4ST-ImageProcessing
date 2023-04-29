@@ -17,9 +17,28 @@ public class Morphology {
         return out;
     }
 
-        int comps = in.length;
-        int height = in[0].length;
-        int width = in[0][0].length;
+    private static int[][][] hmElems = new int[][][] {
+            {
+                    { -1, 1, -1 },
+                    { 0, 1, 1 },
+                    { 0, 0, -1 }
+            },
+            {
+                    { -1, 0, 0 },
+                    { 1, 1, 0 },
+                    { -1, 1, -1 }
+            },
+            {
+                    { -1, 1, -1 },
+                    { 1, 1, 0 },
+                    { -1, 0, 0 }
+            },
+            {
+                    { 0, 0, -1 },
+                    { 0, 1, 1 },
+                    { -1, 1, -1 }
+            }
+    };
 
         int out[][][] = new int[comps][height][width];
 
