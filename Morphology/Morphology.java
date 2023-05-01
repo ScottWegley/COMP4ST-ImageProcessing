@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import Library.ImageEditor;
+import Library.ImageEditor.OPERATION;
 
 public class Morphology {
 
@@ -142,7 +143,14 @@ public class Morphology {
                     "C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\open.PNG");
             ImageEditor.writePNG(ImageEditor.int2bi(close(img, genStruc(3, 1), 2, 2)),
                     "C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\close.PNG");
-            ImageEditor.writePNG(ImageEditor.int2bi(close(img, hmElems[3], 1, 1)),
+
+            int[][][][] hmImgs = new int[4][img.length][img[0].length][img[0][0].length];
+            for (int i = 0; i < hmImgs.length; i++) {
+                hmImgs[i] = hitMiss(img, hmElems[i], 1, 1);
+                if(i < 1){continue;}
+                hmImgs[i] = ImageEditor.alter(hmImgs[i], hmImgs[i-1], OPERATION.OR);
+            }
+            ImageEditor.writePNG(ImageEditor.int2bi(hmImgs[3]),
                     "C:\\Code\\CSC4ST-ImageProcessing\\Morphology\\hitMiss.PNG");
         } catch (IOException e) {
             // TODO Auto-generated catch block
