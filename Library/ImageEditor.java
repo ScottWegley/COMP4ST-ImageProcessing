@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class ImageEditor {
     public static enum OPERATION {
-        ADD, SUB, MUL, DIV
+        ADD, SUB, MUL, DIV, OR
     }
 
     public static int[][] convolve(int in[][], double[][] mask, boolean normalize, boolean clamp)
@@ -145,20 +145,23 @@ public class ImageEditor {
         for (int i = 0; i < p; i++) {
             for (int j = 0; j < h; j++) {
                 for (int q = 0; q < w; q++) {
-                    double pixel = img[i][j][q];
+                    double pixel = 0;
                     switch (op) {
                         case ADD:
-                            pixel += img1[i][j][q];
+                            pixel = img[i][j][q] + img1[i][j][q];
                             break;
                         case SUB:
-                            pixel -= img1[i][j][q];
+                            pixel = img[i][j][q] - img1[i][j][q];
                             break;
                         case MUL:
-                            pixel *= img1[i][j][q];
+                            pixel = img[i][j][q] * img1[i][j][q];
                             break;
                         case DIV:
-                            pixel /= img1[i][j][q];
+                            pixel = img[i][j][q] / img1[i][j][q];
                             break;
+                        case OR:
+                            pixel = (img[i][j][q] != 0 || img1[i][j][q] != 0 ? Math.max(img[i][j][q], img1[i][j][q]) : 0);
+                        break;
                     }
                     output[i][j][q] = (int) (pixel < 0 ? 0 : pixel > 255 ? 255 : pixel);
                 }
